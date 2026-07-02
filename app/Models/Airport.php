@@ -21,4 +21,10 @@ class Airport extends Model
         'city',
         'country',
     ];
+
+    // RELASI 
+    public function segments()
+    {
+        return $this->hasMany(FlightSegment::class);
+    }
 }

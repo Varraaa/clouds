@@ -20,4 +20,15 @@ class FlightSegment extends Model
         'airport_id',
         'time',
     ];
+
+    // RELASI 
+    public function flight()
+    {
+        return $this->belongsTo(flight::class);
+    }
+
+    public function a()
+    {
+        return $this->belongsTo(Airport::class);
+    }
 }

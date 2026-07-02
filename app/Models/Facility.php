@@ -19,4 +19,10 @@ class Facility extends Model
         'name',
         'description',
     ];
+
+    // RELASI 
+    public function classes()
+    {
+        return $this->belongsToMany(FlightClass::class, 'flight_class_facility', 'facility_id', 'flight_class_id');
+    }
 }

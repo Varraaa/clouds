@@ -19,4 +19,10 @@ class Airline extends Model
         'name',
         'logo',
     ];
+
+    // RELASI 
+    public function flights()
+    {
+        return $this->hasMany(Flight::class);
+    }
 }

@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('promo_codes', function (Blueprint $table) {
             $table->id();
+            $table->integer('code');
+            $table->enum('discount_type', ['fixed', 'percentage']);
+            $table->integer('discount');
+            $table->dateTime('valid_until'); // cek diskon valid (ada atau tidak)
+            $table->boolean('is_used')->default(false); // cek apakah kode promo sudah digunakan atau belum
+            $table->SoftDeletes(); // Menambahkan kolom deleted_at untuk fitur "Recycle Bin"
             $table->timestamps();
         });
     }

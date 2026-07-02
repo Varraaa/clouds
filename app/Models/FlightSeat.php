@@ -21,4 +21,10 @@ class FlightSeat extends Model
         'class_type',
         'is_available',
     ];
+
+    // RELASI 
+    public function flight()
+    {
+        return $this->belongsTo(Flight::class);
+    }
 }
