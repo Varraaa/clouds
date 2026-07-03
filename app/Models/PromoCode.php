@@ -16,7 +16,7 @@ class PromoCode extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = [
         'code',
-        'disount_type',
+        'discount_type',
         'discount',
         'valid_until',
         'is_used',

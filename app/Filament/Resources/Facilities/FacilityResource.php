@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\Airports;
+namespace App\Filament\Resources\Facilities;
 
-use App\Filament\Resources\Airports\Pages\CreateAirport;
-use App\Filament\Resources\Airports\Pages\EditAirport;
-use App\Filament\Resources\Airports\Pages\ListAirports;
-use App\Filament\Resources\Airports\Schemas\AirportForm;
-use App\Filament\Resources\Airports\Tables\AirportsTable;
-use App\Models\Airport;
+use App\Filament\Resources\Facilities\Pages\CreateFacility;
+use App\Filament\Resources\Facilities\Pages\EditFacility;
+use App\Filament\Resources\Facilities\Pages\ListFacilities;
+use App\Filament\Resources\Facilities\Schemas\FacilityForm;
+use App\Filament\Resources\Facilities\Tables\FacilitiesTable;
+use App\Models\Facility;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -16,9 +16,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AirportResource extends Resource
+class FacilityResource extends Resource
 {
-    protected static ?string $model = Airport::class;
+    protected static ?string $model = Facility::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -26,35 +26,29 @@ class AirportResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return AirportForm::configure($schema)
-            ->schema([
+        return FacilityForm::configure($schema)
+        ->schema([
                 \Filament\Forms\Components\FileUpload::make('image')
                     ->image()
-                    ->directory('airports')
+                    ->directory('facilities')
                     ->required()
                     ->columnSpan(2),
-                    \Filament\Forms\Components\TextInput::make('iata_code')
-                        ->required(),
                     \Filament\Forms\Components\TextInput::make('name')
                         ->required(),
-                    \Filament\Forms\Components\TextInput::make('city')
-                        ->required(),
-                    \Filament\Forms\Components\TextInput::make('country')
+                    \Filament\Forms\Components\TextInput::make('description')
                         ->required(),
             ]);
-        
     }
 
     public static function table(Table $table): Table
     {
-        return AirportsTable::configure($table)
-            ->columns([
+        return FacilitiesTable::configure($table)
+        ->columns([
                 \Filament\Tables\Columns\ImageColumn::make('image'),
-                \Filament\Tables\Columns\TextColumn::make('iata_code'),
                 \Filament\Tables\Columns\TextColumn::make('name'),
-                \Filament\Tables\Columns\TextColumn::make('city'),
-                \Filament\Tables\Columns\TextColumn::make('country'),
+                \Filament\Tables\Columns\TextColumn::make('description'),
             ])
+            
             ->actions([
                 \Filament\Actions\ViewAction::make(),
                 \Filament\Actions\EditAction::make(),
@@ -72,9 +66,9 @@ class AirportResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListAirports::route('/'),
-            'create' => CreateAirport::route('/create'),
-            'edit' => EditAirport::route('/{record}/edit'),
+            'index' => ListFacilities::route('/'),
+            'create' => CreateFacility::route('/create'),
+            'edit' => EditFacility::route('/{record}/edit'),
         ];
     }
 
