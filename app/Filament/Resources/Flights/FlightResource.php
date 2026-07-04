@@ -67,7 +67,7 @@ class FlightResource extends Resource
                                     \Filament\Forms\Components\Select::make('class_type')
                                         ->options([
                                             'Economy' => 'Economy',
-                                            'B  usiness' => 'Business',
+                                            'Business' => 'Business',
                                         ])
                                         ->required(),
                                     \Filament\Forms\Components\TextInput::make('price')
