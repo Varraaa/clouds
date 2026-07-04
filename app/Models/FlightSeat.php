@@ -20,6 +20,7 @@ class FlightSeat extends Model
         'column',
         'class_type',
         'is_available',
+        'name',
     ];
 
     // RELASI 
