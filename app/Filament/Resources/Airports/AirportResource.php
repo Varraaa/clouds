@@ -30,6 +30,7 @@ class AirportResource extends Resource
             ->schema([
                 \Filament\Forms\Components\FileUpload::make('image')
                     ->image()
+                    ->disk('public') // WAJIB ADA BIAR POTO AIRPORT NYA KE PUBLIC (POTO THUMBNAIL DAN NYAMBNUNG KE )
                     ->directory('airports')
                     ->required()
                     ->columnSpan(2),
@@ -49,7 +50,8 @@ class AirportResource extends Resource
     {
         return AirportsTable::configure($table)
             ->columns([
-                \Filament\Tables\Columns\ImageColumn::make('image'),
+                \Filament\Tables\Columns\ImageColumn::make('image')
+                    ->disk('public'),
                 \Filament\Tables\Columns\TextColumn::make('iata_code'),
                 \Filament\Tables\Columns\TextColumn::make('name'),
                 \Filament\Tables\Columns\TextColumn::make('city'),
