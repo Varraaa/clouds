@@ -5,51 +5,39 @@ namespace App\Repositories;
 use App\Interface\FlightRepositoryInterface;
 use App\Models\Flight;
 
+
 class FlightRepository implements FlightRepositoryInterface
 {
-    public function getAllFlight($filter = null)
+    public function getAllFlights($filter = null)
     {
-        $query = Flight::with(['airline', 'segments.airport', 'classes']);
+        $flights = Flight::query();
 
-        if ($filter) {
-            if (!empty($filter['origin'])) {
-                $query->whereHas('segments', function ($q) use ($filter) {
-                    $q->where('sequence', 1)
-                        ->whereHas('airport', function ($q2) use ($filter) {
-                            $q2->where('iata_code', $filter['origin']);
-                        });
-                });
-            }
-
-            if (!empty($filter['destination'])) {
-                $query->whereHas('segments', function ($q) use ($filter) {
-                    $q->whereHas('airport', function ($q2) use ($filter) {
-                        $q2->where('iata_code', $filter['destination']);
-                    });
-                });
-            }
-
-            if (!empty($filter['departure_date'])) {
-                $query->whereHas('segments', function ($q) use ($filter) {
-                    $q->where('sequence', 1)
-                        ->whereDate('time', $filter['departure_date']);
-                });
-            }
-
-            if (!empty($filter['class_type'])) {
-                $query->whereHas('classes', function ($q) use ($filter) {
-                    $q->where('class_type', $filter['class_type']);
-                });
-            }
+        if (!empty($filter['departure'])) {
+            $flights->whereHas('segments', function ($query) use ($filter) {
+                $query->where('airport_id', $filter['departure'])
+                    ->where('sequence', 1);
+            });
         }
 
-        return $query->get();
+        if (!empty($filter['arrival'])) {
+            $flights->whereHas('segments', function ($query) use ($filter) {
+                $query->where('airport_id', $filter['destination'])
+                    ->orderBy('sequence', 'desc')
+                    ->limit(1);
+            });
+        }
+
+        if (!empty($filter['date'])) {
+            $flights->whereHas('segments', function ($query) use ($filter) {
+                $query->whereDate('time', $filter['date']);
+            });
+        }
+
+        return $flights->get();
     }
 
-    public function getFlighhtByFlightNumber($FlightNumber)
+    public function getFlightByFlightNumber($flightNumber)
     {
-        return Flight::with(['airline', 'segments.airport', 'classes', 'seats'])
-            ->where('flight_number', $FlightNumber)
-            ->first();
+        return Flight::where('flight_number', $flightNumber)->first();
     }
 }

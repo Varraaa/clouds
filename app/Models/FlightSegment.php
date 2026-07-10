@@ -21,6 +21,10 @@ class FlightSegment extends Model
         'time',
     ];
 
+    protected $casts = [
+        'time' => 'datetime'
+    ];
+
     // RELASI 
     public function flight()
     {

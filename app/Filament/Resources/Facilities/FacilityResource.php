@@ -30,6 +30,7 @@ class FacilityResource extends Resource
         ->schema([
                 \Filament\Forms\Components\FileUpload::make('image')
                     ->image()
+                    ->disk('public') // WAJIBB
                     ->directory('facilities')
                     ->required()
                     ->columnSpan(2),
@@ -44,7 +45,8 @@ class FacilityResource extends Resource
     {
         return FacilitiesTable::configure($table)
         ->columns([
-                \Filament\Tables\Columns\ImageColumn::make('image'),
+                \Filament\Tables\Columns\ImageColumn::make('image')
+                    ->disk('public'), // WAJIBB
                 \Filament\Tables\Columns\TextColumn::make('name'),
                 \Filament\Tables\Columns\TextColumn::make('description'),
             ])

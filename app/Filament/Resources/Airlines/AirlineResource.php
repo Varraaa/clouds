@@ -30,6 +30,7 @@ class AirlineResource extends Resource
         ->schema([
                 \Filament\Forms\Components\FileUpload::make('logo')
                     ->image()
+                    ->disk('public') // WAJIBB
                     ->directory('airlines')
                     ->required()
                     ->columnSpan(2),
@@ -44,7 +45,8 @@ class AirlineResource extends Resource
     {
         return AirlinesTable::configure($table)
         ->columns([
-                \Filament\Tables\Columns\ImageColumn::make('logo'),
+                \Filament\Tables\Columns\ImageColumn::make('logo')
+                    ->disk('public'),
                 \Filament\Tables\Columns\TextColumn::make('code'),
                 \Filament\Tables\Columns\TextColumn::make('name'),
             ])
