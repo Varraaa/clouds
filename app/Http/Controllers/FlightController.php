@@ -41,4 +41,11 @@ class FlightController extends Controller
 
         return view('pages.flight.index', compact ('flights', 'airline'));
     }
+
+    public function show($flightNumber)
+    {
+        $flight = $this->flightRepository->getFlightByFlightNumber($flightNumber);
+
+        return view ('pages.flight.show', compact('flight'));
+    }
 }
