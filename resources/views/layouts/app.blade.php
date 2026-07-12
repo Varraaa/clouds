@@ -16,6 +16,8 @@
     @yield('content')
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="{{ asset('assets\images/js/index.js') }}"></script>
+
+    @yield('scripts')
 </body>
 
 </html

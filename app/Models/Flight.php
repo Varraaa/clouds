@@ -96,7 +96,7 @@ class Flight extends Model
 
     protected function getSeatsPerRow($classType)
     {
-        switch ($classType) {
+        switch (strtolower($classType)) {
             case 'business':
                 return 4;
             case 'economy':
