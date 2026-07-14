@@ -17,6 +17,8 @@ class TransactionPassengers extends Model
     protected $fillable = [
         'transaction_id',
         'flight_seat_id',
+        'name',
+        'identity_number',
         'date_of_birth',
         'nationality',
     ];

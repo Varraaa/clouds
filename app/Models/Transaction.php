@@ -36,7 +36,7 @@ class Transaction extends Model
 
     public function class()
     {
-        return $this->belongsTo(FlightClass::class);
+        return $this->belongsTo(FlightClass::class, 'flight_class_id');
     }
 
     public function promo()

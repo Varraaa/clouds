@@ -15,7 +15,7 @@
                 <a href="choose-tiers.html"
                     class="flex items-center rounded-[50px] py-3 px-5 gap-[10px] w-fit bg-garuda-black">
                     <img src="{{ asset('assets/images/icons/arrow-left-white.svg') }}" class="w-6 h-6" alt="icon">
-                    <p class="font-semibold text-white">Back to Choose Flight</p>
+                    <p class="font-semibold text-white">Back to Choose Tiers</p>
                 </a>
                 <h1 class="font-extrabold text-[50px] leading-[75px]">Choose Seats</h1>
                 <div id="Flight-Info"
@@ -208,10 +208,10 @@
                                 <label
                                     class="group relative flex w-[55px] h-[52.25px] shrink-0 @if (strtolower($tier->class_type) == 'business') [&:nth-child(4n+2)]:mr-10 @else [&:nth-child(6n+3)]:mr-[46px] @endif"
                                     data-seat="{{ $seat->name }}" data-seat-id="{{ $seat->id }}">
-                                    <input type="checkbox" name="seat"
+                                    <input type="checkbox" name="seat[]"
+                                        value="{{ $seat->id }}"
                                         class="seat-checkbox absolute top-1/2 left-1/2 opacity-0"
-                                        @if (!$seat->is_available) disabled @endif
-                                        @if ($seat->is_available)  @endif />
+                                        @if (!$seat->is_available) disabled @endif />
 
                                     <img src="{{ asset('assets/images/icons/seat.svg') }}"
                                         class="absolute w-full h-full object-contain opacity-100 group-has-[:checked]:opacity-0 group-has-[:disabled]:opacity-0 transition-all duration-300"

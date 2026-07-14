@@ -33,7 +33,8 @@ class TransactionResource extends Resource
             ->schema([
                 Section::make('Informasi Umum')
                     ->schema([
-                        \Filament\Forms\Components\TextInput::make('code'),
+                        \Filament\Forms\Components\TextInput::make('code')
+                            ->disabled(), // Bagus di-disabled agar kode booking tidak diubah manual
                         \Filament\Forms\Components\Select::make('flight_id')
                             ->relationship('flight', 'flight_number'),
                         \Filament\Forms\Components\Select::make('flight_class_id')
@@ -43,31 +44,38 @@ class TransactionResource extends Resource
                 Section::make('Informasi Penumpang')
                     ->schema([
                         \Filament\Forms\Components\TextInput::make('number_of_passengers'),
-                        \Filament\Forms\Components\TextInput::make('name'),
+                        \Filament\Forms\Components\TextInput::make('name'), // Ini nama pemesan utama (Aman)
                         \Filament\Forms\Components\TextInput::make('email'),
                         \Filament\Forms\Components\TextInput::make('phone'),
+                        
                         Section::make('Daftar Penumpang')
                             ->schema([
                                 Repeater::make('passenger')
-                                ->relationship('passengers')
-                                ->schema([
-                                    \Filament\Forms\Components\TextInput::make('seat.name'),
-                                    \Filament\Forms\Components\TextInput::make('name'),
-                                    \Filament\Forms\Components\TextInput::make('date_of_birth'),
-                                    \Filament\Forms\Components\TextInput::make('nationality'),
-                                ])
+                                    ->relationship('passengers')
+                                    ->schema([
+                                        // FIX 1: Ubah seat name menjadi Select dengan relationship yang benar ke tabel flight_seats
+                                        \Filament\Forms\Components\Select::make('flight_seat_id')
+                                            ->label('Seat Name')
+                                            ->relationship('seat', 'name')
+                                            ->required(),
+                                            
+                                        // FIX 2: Supaya tidak bentrok dengan nama pemesan di atas, gunakan label penjelas
+                                        \Filament\Forms\Components\TextInput::make('name'),
+                                        \Filament\Forms\Components\TextInput::make('date_of_birth'),
+                                        \Filament\Forms\Components\TextInput::make('nationality'),
+                                    ])
                             ])
                     ])->columnspan(2),
 
                 Section::make('Pembayaran')
                     ->schema([
-                        \Filament\Forms\Components\TextInput::make('promo.code'),
-                        \Filament\Forms\Components\TextInput::make('promo.discount_type'),
-                        \Filament\Forms\Components\TextInput::make('promo.discount'),
+                        \Filament\Forms\Components\Select::make('promo_code_id')
+                            ->label('Promo Code')
+                            ->relationship('promo', 'code')
+                            ->disabled(),
                         \Filament\Forms\Components\TextInput::make('payment_status'),
                         \Filament\Forms\Components\TextInput::make('subtotal'),
                         \Filament\Forms\Components\TextInput::make('grandtotal'),
-
                     ])->columnspan(2),
             ]);
     }

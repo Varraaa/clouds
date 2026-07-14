@@ -13,9 +13,9 @@
         <a href="choose-seats-economy.html"
             class="flex items-center rounded-[50px] py-3 px-5 gap-[10px] w-fit bg-garuda-black">
             <img src="{{ asset('assets/images/icons/arrow-left-white.svg') }}" class="w-6 h-6" alt="icon">
-            <p class="font-semibold text-white">Back to Choose Seats</p>
+            <p class="font-semibold text-white">Back to Passenger Details</p>
         </a>
-        <h1 class="font-extrabold text-[50px] leading-[75px] mt-[30px]">Passenger Details</h1>
+        <h1 class="font-extrabold text-[50px] leading-[75px] mt-[30px]">Checkout Details</h1>
         <div class="flex gap-[30px] mt-[30px]">
             <div id="Left-Content" class="flex flex-col gap-[30px] w-[470px] shrink-0">
                 <div id="Flight-Info" class="flex flex-col w-[470px] shrink-0 h-fit rounded-[20px] bg-white p-5 gap-5">
@@ -149,6 +149,19 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <div>
+                                <p class="text-sm text-garuda-grey">Discount</p>
+                                <p class="font-semibold text-lg leading-[27px] mt-[2px] text-garuda-green" id="discount">
+                                    Rp 0</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-garuda-grey">Promo Code</p>
+                                <p class="font-semibold text-lg leading-[27px] mt-[2px]" id="promo-code">
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
                                 <p class="text-sm text-garuda-grey">Total Tax</p>
                                 <p class="font-semibold text-lg leading-[27px] mt-[2px]">
                                     {{ 'Rp. ' . number_format($tier->price * count($transaction['selected_seats']) * 0.11, 0, ',', '.') }}
@@ -156,19 +169,17 @@
                             </div>
                             <div>
                                 <p class="text-sm text-garuda-grey">Grand Total</p>
-                                <p class="font-bold text-2xl leading-9 text-garuda-blue mt-[2px]">
+                                <p class="font-bold text-2xl leading-9 text-garuda-blue mt-[2px]" id="grand-total">
                                     {{ 'Rp. ' . number_format($tier->price * count($transaction['selected_seats']) * 1.11, 0, ',', '.') }}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button type="submit"
-                    class="w-full rounded-full py-3 px-5 text-center bg-garuda-blue hover:shadow-[0px_14px_30px_0px_#0068FF66] transition-all duration-300">
-                    <span class="font-semibold text-white">Continue Booking</span>
-                </button>
             </div>
-            <form action="success-booking.html" id="Right-Content" class="flex flex-col gap-[30px] w-[490px] shrink-0">
+            <form action="{{ route('booking.payment', $flight->flight_number) }}" method="POST" id="Right-Content" 
+                class="flex flex-col gap-[30px] w-[490px] shrink-0">
+                @csrf
                 <div id="Customer-Info"
                     class="accordion group flex flex-col h-fit rounded-[20px] bg-white overflow-hidden has-[:checked]:!h-[75px] transition-all duration-300">
                     <label class="flex items-center justify-between p-5">
@@ -184,7 +195,7 @@
                                 class="flex items-center rounded-full border border-garuda-black py-3 px-5 gap-[10px] focus-within:border-[#0068FF] transition-all duration-300">
                                 <img src="{{ asset('assets/images/icons/profile-black.svg') }}" class="w-5 flex shrink-0"
                                     alt="icon">
-                                <input type="text" name="" id="" value="{{ $transaction['name'] }}"
+                                <input type="text" id="" value="{{ $transaction['name'] }}"
                                     readonly
                                     class="appearance-none outline-none w-full font-semibold placeholder:font-normal"
                                     placeholder="Write your complete name">
@@ -196,7 +207,7 @@
                                 class="flex items-center rounded-full border border-garuda-black py-3 px-5 gap-[10px] focus-within:border-[#0068FF] transition-all duration-300">
                                 <img src="{{ asset('assets/images/icons/sms-black.png') }}" class="w-5 flex shrink-0"
                                     alt="icon">
-                                <input type="email" name="" id="" value="{{ $transaction['email'] }}"
+                                <input type="email" id="" value="{{ $transaction['email'] }}"
                                     readonly
                                     class="appearance-none outline-none w-full font-semibold placeholder:font-normal"
                                     placeholder="Write your valid email">
@@ -208,7 +219,7 @@
                                 class="flex items-center rounded-full border border-garuda-black py-3 px-5 gap-[10px] focus-within:border-[#0068FF] transition-all duration-300">
                                 <img src="{{ asset('assets/images/icons/call-black.svg') }}" class="w-5 flex shrink-0"
                                     alt="icon">
-                                <input type="tel" name="" id="" value="{{ $transaction['phone'] }}"
+                                <input type="tel" id="" value="{{ $transaction['phone'] }}"
                                     readonly
                                     class="appearance-none outline-none w-full font-semibold placeholder:font-normal"
                                     placeholder="Write your active number">
@@ -229,7 +240,7 @@
                                 <p class="font-semibold">Complete Name</p>
                                 <div
                                     class="flex items-center rounded-full border border-garuda-black py-3 px-5 gap-[10px] focus-within:border-[#0068FF] transition-all duration-300
-                                    @error('passengers.' . $loop->index . '.name') border-red-500 @enderror">
+                                        @error('passengers.' . $loop->index . '.name') border-red-500 @enderror">
                                     <img src="{{ asset('assets/images/icons/profile-black.svg') }}"
                                         class="w-5 flex shrink-0" alt="icon">
                                     <input type="text" name="passengers[{{ $loop->index }}][name]" id=""
@@ -248,11 +259,11 @@
                                 <div class="flex items-center gap-[10px]">
                                     <label
                                         class="relative flex items-center w-full rounded-full overflow-hidden border border-garuda-black gap-[10px] focus-within:border-[#0068FF] transition-all duration-300
-                                        @error('passengers.' . $loop->index . '.date_of_birth') border-red-500 @enderror">
+                                            @error('passengers.' . $loop->index . '.date_of_birth') border-red-500 @enderror">
                                         <img src="{{ asset('assets/images/icons/note-add-black.svg') }}"
                                             class="absolute transform -translate-y-1/2 top-1/2 left-5 w-5 shrink-0"
                                             alt="icon">
-                                        <select id="day-select-{{ $loop->index }}" name=""
+                                        <select id="day-select-{{ $loop->index }}" 
                                             class="date-select day-select appearance-none w-full outline-none pl-[50px] py-3 px-5 font-semibold indeterminate:!font-normal"
                                             data-index="{{ $loop->index }}"
                                             onchange="updateDateOfBirth({{ $loop->index }})">
@@ -267,11 +278,11 @@
 
                                     <label
                                         class="relative flex items-center w-full rounded-full overflow-hidden border border-garuda-black gap-[10px] focus-within:border-[#0068FF] transition-all duration-300
-                                        @error('passengers.' . $loop->index . '.date_of_birth') border-red-500 @enderror">
+                                            @error('passengers.' . $loop->index . '.date_of_birth') border-red-500 @enderror">
                                         <img src="{{ asset('assets/images/icons/note-add-black.svg') }}"
                                             class="absolute transform -translate-y-1/2 top-1/2 left-5 w-5 shrink-0"
                                             alt="icon">
-                                        <select id="month-select-{{ $loop->index }}" name=""
+                                        <select id="month-select-{{ $loop->index }}" 
                                             class="date-select month-select appearance-none w-full outline-none pl-[50px] py-3 px-5 font-semibold indeterminate:!font-normal"
                                             data-index="{{ $loop->index }}"
                                             onchange="updateDateOfBirth({{ $loop->index }})">
@@ -286,11 +297,11 @@
 
                                     <label
                                         class="relative flex items-center w-full rounded-full overflow-hidden border border-garuda-black gap-[10px] focus-within:border-[#0068FF] transition-all duration-300
-                                        @error('passengers.' . $loop->index . '.date_of_birth') border-red-500 @enderror">
+                                            @error('passengers.' . $loop->index . '.date_of_birth') border-red-500 @enderror">
                                         <img src="{{ asset('assets/images/icons/note-add-black.svg') }}"
                                             class="absolute transform -translate-y-1/2 top-1/2 left-5 w-5 shrink-0"
                                             alt="icon">
-                                        <select id="year-select-{{ $loop->index }}" name=""
+                                        <select id="year-select-{{ $loop->index }}" 
                                             class="date-select year-select appearance-none w-full outline-none pl-[50px] py-3 px-5 font-semibold indeterminate:!font-normal"
                                             data-index="{{ $loop->index }}"
                                             onchange="updateDateOfBirth({{ $loop->index }})">
@@ -312,7 +323,7 @@
                                 <p class="font-semibold">Nationality</p>
                                 <div
                                     class="relative flex items-center w-full rounded-full overflow-hidden border border-garuda-black gap-[10px] focus-within:border-[#0068FF] transition-all duration-300
-                                    @error('passengers.' . $loop->index . '.nationality') border-red-500 @enderror">
+                                        @error('passengers.' . $loop->index . '.nationality') border-red-500 @enderror">
                                     <img src="{{ asset('assets/images/icons/global-black.svg') }}"
                                         class="absolute transform -translate-y-1/2 top-1/2 left-5 w-5 shrink-0"
                                         alt="icon">
@@ -337,38 +348,8 @@
                     </div>
                 @endforeach
 
-                <div id="Promo" class="flex flex-col rounded-[20px] p-5 gap-5 bg-white overflow-hidden">
-                    <h2 class="font-bold text-xl leading-[30px]">Apply Promo</h2>
-                    <label class="flex flex-col gap-[10px]">
-                        <p class="font-semibold">Your Promo Code</p>
-                        <div class="flex items-center flex-nowrap gap-[10px]">
-                            <div
-                                class="flex items-center rounded-full border border-garuda-black py-3 px-5 gap-[10px] focus-within:border-[#0068FF] transition-all duration-300">
-                                <img src="assets/images/icons/receipt-discount-black.svg" class="w-5 flex shrink-0"
-                                    alt="icon">
-                                <input type="text" name="" id=""
-                                    class="appearance-none outline-none w-full font-semibold placeholder:font-normal"
-                                    placeholder="Input promo code">
-                                <img src="assets/images/icons/verify.svg" class="w-5 flex shrink-0" alt="icon">
-                            </div>
-                            <span class="font-semibold text-garuda-green text-nowrap">Kode promo tersedia</span>
-                        </div>
-                    </label>
-                    <label class="flex flex-col gap-[10px]">
-                        <p class="font-semibold">Your Promo Code</p>
-                        <div class="flex items-center flex-nowrap gap-[10px]">
-                            <div
-                                class="flex items-center rounded-full border border-garuda-black py-3 px-5 gap-[10px] focus-within:border-[#0068FF] transition-all duration-300">
-                                <img src="assets/images/icons/receipt-discount-black.svg" class="w-5 flex shrink-0"
-                                    alt="icon">
-                                <input type="text" name="" id=""
-                                    class="appearance-none outline-none w-full font-semibold placeholder:font-normal"
-                                    placeholder="Input promo code">
-                            </div>
-                            <span class="font-semibold text-garuda-red text-nowrap">Kode promo tidak tersedia</span>
-                        </div>
-                    </label>
-                </div>
+                @livewire('check-promo-code')
+
                 <div id="Payment-Method" class="flex flex-col rounded-[20px] p-5 gap-5 bg-white overflow-hidden">
                     <h2 class="font-bold text-xl leading-[30px]">Payment Method</h2>
                     <div class="flex flex-col gap-[10px]">
@@ -376,7 +357,7 @@
                         <div class="flex items-center flex-nowrap gap-[10px]">
                             <label
                                 class="group relative flex items-center w-full rounded-full py-3 px-5 bg-garuda-bg-dark-grey gap-[10px] has-[:checked]:bg-garuda-orange transition-all duration-300">
-                                <img src="assets/images/icons/note-add-black.svg"
+                                <img src="{{ asset('assets/images/icons/note-add-black.svg') }}"
                                     class="w-5 flex shrink-0 group-has-[:checked]:invert transition-all duration-300"
                                     alt="icon">
                                 <span class="font-semibold group-has-[:checked]:text-white">Midtrans Gateway</span>
@@ -384,11 +365,11 @@
                             </label>
                             <label
                                 class="group relative flex items-center w-full rounded-full py-3 px-5 bg-garuda-bg-dark-grey gap-[10px] has-[:checked]:bg-garuda-orange transition-all duration-300">
-                                <img src="assets/images/icons/note-add-black.svg"
+                                <img src="{{ asset('assets/images/icons/note-add-black.svg') }}"
                                     class="w-5 flex shrink-0 group-has-[:checked]:invert transition-all duration-300"
                                     alt="icon">
-                                <span class="font-semibold group-has-[:checked]:text-white">Transfer to Bank</span>
-                                <input type="radio" name="payment-method" class="absolute opacity-0 left-1/2" required>
+                                <span class="font-semibold group-has-[:checked]:text-white">Transfer to Bank (Coming Soon)</span>
+                                <input type="radio" name="payment-method" class="absolute opacity-0 left-1/2" disabled>
                             </label>
                         </div>
                     </div>
@@ -400,4 +381,54 @@
             </form>
         </div>
     </main>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('assets/images/js/date-of-birth.js') }}"></script>
+    <script>
+        function updateDateOfBirth(index) {
+            const day = document.getElementById(`day-select-${index}`).value;
+            const month = document.getElementById(`month-select-${index}`).value;
+            const year = document.getElementById(`year-select-${index}`).value;
+
+            if (day && month && year) {
+                document.getElementById(`dateOfBirth-${index}`).value = `${year}-${month}-${day}`;
+            }
+        }
+
+        // FIX: sinkronkan hidden date_of_birth begitu halaman checkout di-load,
+        // karena dropdown sudah ke-pre-select dari server (via Carbon) tapi
+        // hidden input-nya belum otomatis keisi sampai ada event onchange.
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.day-select').forEach(select => {
+                const index = select.dataset.index;
+                updateDateOfBirth(index);
+            });
+        });
+
+        window.addEventListener('promoCodeUpdated', event => {
+            const price = parseFloat('{{ $tier->price }}');
+            const quantity = parseInt('{{ count($transaction['selected_seats']) }}');
+            const totalWithoutDiscount = price * quantity * 1.11;
+
+            let newTotal;
+            let totalPromo = 0;
+
+            const promoCode = event.detail[0].promo_code;
+            const discountType = event.detail[0].discount_type;
+            const discountValue = event.detail[0].discount;
+
+            if (discountType === 'percentage') {
+                totalPromo = totalWithoutDiscount * (discountValue / 100);
+            } else {
+                totalPromo = discountValue;
+            }
+
+            newTotal = totalWithoutDiscount - totalPromo;
+
+            document.getElementById('promo-code').innerHTML = promoCode;
+            document.getElementById('grand-total').innerHTML = 'Rp ' + newTotal.toLocaleString('id-ID');
+            document.getElementById('discount').innerHTML = '- Rp ' + totalPromo.toLocaleString('id-ID');
+        });
+    </script>
 @endsection

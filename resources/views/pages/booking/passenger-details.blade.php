@@ -16,7 +16,7 @@
             <p class="font-semibold text-white">Back to Choose Seats</p>
         </a>
         <h1 class="font-extrabold text-[50px] leading-[75px] mt-[30px]">Passenger Details</h1>
-        <form action="{{ route('booking.savePassengerDetails', $flight->flight_number) }}" class="flex gap-[30px] mt-[30px]"
+        <form id="form-passenger-details" action="{{ route('booking.savePassengerDetails', $flight->flight_number) }}" class="flex gap-[30px] mt-[30px]"
             method="POST">
             @csrf
             <div id="Left-Content" class="flex flex-col gap-[30px] w-[470px] shrink-0">
@@ -233,6 +233,9 @@
 
                 <!-- for accordions with select input inside, the script was different from the normal accordion -->
                 @foreach ($transaction['selected_seats'] as $transaction)
+                    <input type="hidden" name="passengers[{{ $loop->index }}][flight_seat_id]"
+                    value="{{ $transaction }}">
+                    
                     <div id="Passenger-{{ $loop->index + 1 }}"
                         class="accordion-with-select group flex flex-col h-fit rounded-[20px] bg-white overflow-hidden transition-all duration-300">
                         <button type="button" class="accordion-btn flex items-center justify-between p-5">
