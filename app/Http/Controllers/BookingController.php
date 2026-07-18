@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookingShowRequest;
 use App\Http\Requests\StorePassengerDetailRequest;
 use App\Interface\FlightRepositoryInterface;
 use App\Interface\TransactionRepositoryInterface;
@@ -23,7 +24,10 @@ class BookingController extends Controller
 
     public function booking(Request $request, $flightNumber)
     {
-        $this->transactionRepository->saveTransactionDataToSession($request->all());
+        $this->transactionRepository->saveTransactionDataToSession(array_merge(
+            $request->all(),
+            ['quantity' => $request->query('quantity', 1)]
+        ));
 
         return redirect()->route('booking.chooseSeat', ['flightNumber' => $flightNumber]);
     }
@@ -88,7 +92,11 @@ class BookingController extends Controller
             'transaction_details' => [
                 'order_id' => $transaction->code,
                 'gross_amount' => $transaction->grandtotal,
-            ]
+            ],
+
+            'callbacks' => [
+                'finish' => route('booking.success'),
+            ],
         ];
 
         $paymentUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
@@ -96,7 +104,7 @@ class BookingController extends Controller
         return redirect($paymentUrl);
     }
 
-    public function success(Request $request) 
+    public function success(Request $request)
     {
         $transaction = $this->transactionRepository->getTransactionByCode($request->order_id);
 
@@ -104,12 +112,23 @@ class BookingController extends Controller
             return redirect()->route('home');
         }
 
-        return view ('pages.booking.success', compact('transaction'));
+        return view('pages.booking.success', compact('transaction'));
     }
 
 
     public function checkBooking()
     {
         return view('pages.booking.check-booking');
+    }
+
+    public function show(BookingShowRequest $request)
+    {
+        $transaction = $this->transactionRepository->getTransactionByCodePhone($request->code, $request->phone);
+
+        if (!$transaction) {
+            return redirect()->back()->with('error', 'Data Transaksi Tidak Ditemukan');
+        }
+
+        return view('pages.booking.detail', compact('transaction'));
     }
 }

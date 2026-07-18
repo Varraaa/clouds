@@ -12,7 +12,8 @@
     <main class="relative flex flex-col w-full max-w-[1280px] px-[75px] mx-auto mt-[50px] mb-[62px]">
         <h1 class="font-extrabold text-[50px] leading-[75px] mt-[30px]">Check Booking</h1>
         <div class="flex gap-[30px] mt-[30px]">
-            <form action="booking-details.html" class="flex flex-col gap-[30px] w-[490px] shrink-0">
+            <form action="{{ route('booking.show') }}" method="POST" class="flex flex-col gap-[30px] w-[490px] shrink-0">
+                @csrf
                 <div id="Booking-details" class="flex flex-col rounded-[20px] p-5 gap-5 bg-white overflow-hidden">
                     <h2 class="font-bold text-xl leading-[30px]">Track Your Booking Details</h2>
                     <div class="flex flex-col gap-5">
@@ -20,7 +21,7 @@
                         <div
                             class="flex items-center rounded-full border border-garuda-black py-3 px-5 gap-[10px] focus-within:border-[#0068FF] transition-all duration-300">
                             <img src="assets/images/icons/note-favorite-black.svg" class="w-5 flex shrink-0" alt="icon">
-                            <input type="text" name="" id=""
+                            <input type="text" name="code" id=""
                                 class="appearance-none outline-none w-full font-semibold placeholder:font-normal"
                                 placeholder="Write your booking id">
                         </div>
@@ -30,7 +31,7 @@
                         <div
                             class="flex items-center rounded-full border border-garuda-black py-3 px-5 gap-[10px] focus-within:border-[#0068FF] transition-all duration-300">
                             <img src="assets/images/icons/call-black.svg" class="w-5 flex shrink-0" alt="icon">
-                            <input type="tel" name="" id=""
+                            <input type="tel" name="phone" id=""
                                 class="appearance-none outline-none w-full font-semibold placeholder:font-normal"
                                 placeholder="Write your phone number">
                         </div>

@@ -7,7 +7,7 @@
             <div
                 class="flex items-center rounded-full border border-garuda-black py-3 px-5 gap-[10px] focus-within:border-[#0068FF] transition-all duration-300">
                 <img src="{{ asset('assets/images/icons/receipt-discount-black.svg') }}" class="w-5 flex shrink-0" alt="icon">
-                <input type="text" name="promo_code" id="promo_code"
+                <input type="text" id="promo_code"
                     class="appearance-none outline-none w-full font-semibold placeholder:font-normal"
                     placeholder="Input promo code" wire:model.lazy="promo_code" wire:keyup="checkPromoCode">
                     @if ($isValid)

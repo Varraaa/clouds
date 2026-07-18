@@ -94,7 +94,7 @@
                                     @endif
                                 </div>
                                 <p class="font-semibold text-garuda-green text-center">
-                                    {{ 'Rp. ' . number_format($flight->classes->first()->price, 0, ',', '.') }}
+                                    {{ 'Rp. ' . number_format($tier->price, 0, ',', '.') }}
                                 </p>
                             </div>
                         </div>
@@ -180,6 +180,9 @@
             <form action="{{ route('booking.payment', $flight->flight_number) }}" method="POST" id="Right-Content" 
                 class="flex flex-col gap-[30px] w-[490px] shrink-0">
                 @csrf
+
+            <input type="hidden" name="promo_code" id="promo_code_input" value="">
+
                 <div id="Customer-Info"
                     class="accordion group flex flex-col h-fit rounded-[20px] bg-white overflow-hidden has-[:checked]:!h-[75px] transition-all duration-300">
                     <label class="flex items-center justify-between p-5">
@@ -396,9 +399,6 @@
             }
         }
 
-        // FIX: sinkronkan hidden date_of_birth begitu halaman checkout di-load,
-        // karena dropdown sudah ke-pre-select dari server (via Carbon) tapi
-        // hidden input-nya belum otomatis keisi sampai ada event onchange.
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.day-select').forEach(select => {
                 const index = select.dataset.index;
@@ -429,6 +429,11 @@
             document.getElementById('promo-code').innerHTML = promoCode;
             document.getElementById('grand-total').innerHTML = 'Rp ' + newTotal.toLocaleString('id-ID');
             document.getElementById('discount').innerHTML = '- Rp ' + totalPromo.toLocaleString('id-ID');
+
+            // FIX: jembatani nilai promo_code dari Livewire ke form utama yang di-submit ke payment()
+            document.getElementById('promo_code_input').value = promoCode;
         });
     </script>
 @endsection
+
+

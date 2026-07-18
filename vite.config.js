@@ -5,8 +5,15 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
+            input: [
+                'resources/css/app.css', 
+                'resources/js/app.js'
+            ],
+            // FIX: Kita ganti dari true menjadi array agar mendeteksi semua file Blade & Routes secara agresif
+            refresh: [
+                'resources/views/**',
+                'routes/**',
+            ],
         }),
         tailwindcss(),
     ],

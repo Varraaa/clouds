@@ -96,7 +96,7 @@
                                     @endif
                                 </div>
                                 <p class="font-semibold text-garuda-green text-center">
-                                    {{ 'Rp. ' . number_format($flight->classes->first()->price, 0, ',', '.') }}
+                                    {{ 'Rp. ' . number_format($tier->price, 0, ',', '.') }}
                                 </p>
                             </div>
                         </div>

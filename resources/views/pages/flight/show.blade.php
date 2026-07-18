@@ -43,8 +43,12 @@
                     </div>
                     <div class="text-end">
                         <p class="text-sm text-garuda-grey">Quantity</p>
-                        <p class="font-semibold text-lg">3 people</p>
+                        <p class="font-semibold text-lg">
+                            {{ $quantity }} people
+                        </p>
                     </div>
+                    <form action="{{ route('booking', $flight->flight_number) }}?quantity={{ $quantity }}" 
+                        id="Tiers" class="grid grid-cols-2 gap-x-[30px]">
                 </div>
                 <div class="flex flex-col rounded-[20px] border border-[#E8EFF7] p-5 gap-5">
                     <div class="flex flex-col gap-4">

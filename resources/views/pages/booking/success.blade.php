@@ -101,26 +101,26 @@
                                         @endif
                                     </div>
                                     <p class="font-semibold text-garuda-green text-center">
-                                        {{ 'Rp. ' . number_format($transaction->flight->classes->first()->price, 0, ',', '.') }}
+                                        {{ 'Rp. ' . number_format($transaction->class->price, 0, ',', '.') }}
                                     </p>
                                 </div>
                             </div>
                             <hr class="border-[#E8EFF7]">
                             <div class="flex items-center rounded-[20px] gap-[14px]">
                                 <div class="flex w-[120px] h-[100px] shrink-0 rounded-[20px] overflow-hidden">
-                                    @if ($transaction->class->class_type === "Economy")
-                                        <img src="{{ asset('assets/images/thumbnails/economy-seat.png') }}" 
+                                    @if ($transaction->class->class_type === 'Economy')
+                                        <img src="{{ asset('assets/images/thumbnails/economy-seat.png') }}"
                                             class="w-full h-full object-cover" alt="icon">
                                     @else
-                                        <img src="{{ asset('assets/images/thumbnails/business-seat.png') }}" 
+                                        <img src="{{ asset('assets/images/thumbnails/business-seat.png') }}"
                                             class="w-full h-full object-cover" alt="icon">
                                     @endif
-                                    
+
                                 </div>
                                 <div>
                                     <p class="font-bold text-xl leading-[30px]">
                                         {{ \Str::ucfirst($transaction->class->class_type) }}
-                                    Class</p>
+                                        Class</p>
                                     <p class="text-garuda-grey mt-1">Enjoy our good flight experience</p>
                                 </div>
                             </div>
@@ -151,9 +151,15 @@
                         class="w-full rounded-full py-3 px-5 text-center bg-garuda-blue hover:shadow-[0px_14px_30px_0px_#0068FF66] transition-all duration-300">
                         <span class="font-semibold text-white">Book More Tickets</span>
                     </a>
-                    <a href="booking-details.html" class="w-full rounded-full py-3 px-5 text-center bg-garuda-black ">
-                        <span class="font-semibold text-white">View My Booking Details</span>
-                    </a>
+                    <form action="{{ route('booking.show') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="code" value="{{ $transaction->code }}">
+                        <input type="hidden" name="phone" value="{{ $transaction->phone }}">
+                        <button type="submit" class="w-full rounded-full py-3 px-5 text-center bg-garuda-black ">
+                            <span class="font-semibold text-white">View My Booking Details</span>
+                        </button>
+                    </form>
+
                 </div>
             </div>
         </div>

@@ -52,7 +52,8 @@
                             </div>
                             <div class="text-end">
                                 <p class="text-sm text-garuda-grey">Quantity</p>
-                                <p class="font-semibold text-lg">3 people</p>
+                                <p class="font-semibold text-lg">
+                                    {{ $transaction['quantity'] ?? 1 }} people</p>
                             </div>
                         </div>
                         <div class="flex flex-col rounded-[20px] border border-[#E8EFF7] p-5 gap-5">
@@ -112,8 +113,13 @@
                             <hr class="border-[#E8EFF7]">
                             <div class="flex items-center rounded-[20px] gap-[14px]">
                                 <div class="flex w-[120px] h-[100px] shrink-0 rounded-[20px] overflow-hidden">
-                                    <img src="{{ asset('assets/images/thumbnails/economy-seat.png') }}"
-                                        class="w-full h-full object-cover" alt="icon">
+                                    @if ($tier->class_type === 'Economy')
+                                        <img src="{{ asset('assets/images/thumbnails/economy-seat.png') }}"
+                                            class="w-full h-full object-cover" alt="icon">
+                                    @else
+                                        <img src="{{ asset('assets/images/thumbnails/business-seat.png') }}"
+                                            class="w-full h-full object-cover" alt="icon">
+                                    @endif
                                 </div>
                                 <div>
                                     <p class="font-bold text-xl leading-[30px]">{{ \Str::ucfirst($tier->class_type) }}
@@ -138,11 +144,15 @@
                         <div class="flex justify-between">
                             <div>
                                 <p class="text-sm text-garuda-grey">Quantity</p>
-                                <p class="font-semibold text-lg leading-[27px] mt-[2px]" id="quantity">0 People</p>
+                                <p class="font-semibold text-lg leading-[27px] mt-[2px]" id="quantity">
+                                    {{ $transaction['quantity'] ?? 1 }} People
+                                </p>
                             </div>
                             <div>
                                 <p class="text-sm text-garuda-grey">Tiers</p>
-                                <p class="font-semibold text-lg leading-[27px] mt-[2px]">Economy</p>
+                                <p class="font-semibold text-lg leading-[27px] mt-[2px]">
+                                    {{ \Str::ucfirst($tier->class_type) }}
+                                </p>
                             </div>
                             <div>
                                 <p class="text-sm text-garuda-grey">Seats</p>
@@ -186,8 +196,9 @@
                     <form action="{{ route('booking.confirmSeat', $flight->flight_number) }}" method="POST"
                         id="form-seat" class="relative px-[56px] pb-[60px]">
                         @csrf
-                        <input type="hidden"  name="flight_id" value="{{ $flight->id }}">
-                        <p class="text-center font-bold text-xl leading-[30px]">{{ \Str::ucfirst($tier->class_type) }} Class</p>
+                        <input type="hidden" name="flight_id" value="{{ $flight->id }}">
+                        <p class="text-center font-bold text-xl leading-[30px]">{{ \Str::ucfirst($tier->class_type) }}
+                            Class</p>
                         <div id="Legend" class="flex items-center justify-center mb-[30px] gap-5 mt-5">
                             <div class="flex items-center gap-[6px]">
                                 <span class="w-4 h-4 flex shrink-0 rounded-[6px] bg-white border border-[#FFA44B]"></span>
@@ -208,8 +219,7 @@
                                 <label
                                     class="group relative flex w-[55px] h-[52.25px] shrink-0 @if (strtolower($tier->class_type) == 'business') [&:nth-child(4n+2)]:mr-10 @else [&:nth-child(6n+3)]:mr-[46px] @endif"
                                     data-seat="{{ $seat->name }}" data-seat-id="{{ $seat->id }}">
-                                    <input type="checkbox" name="seat[]"
-                                        value="{{ $seat->id }}"
+                                    <input type="checkbox" name="seat[]" value="{{ $seat->id }}"
                                         class="seat-checkbox absolute top-1/2 left-1/2 opacity-0"
                                         @if (!$seat->is_available) disabled @endif />
 
@@ -244,8 +254,8 @@
 @endsection
 
 @section('scripts')
-<script>
-    const basePrice = {{ $tier->price }};
-</script>
+    <script>
+        const basePrice = {{ $tier->price }};
+    </script>
     <script src="{{ asset('assets\images/js/chose-seat.js') }}"></script>
 @endsection

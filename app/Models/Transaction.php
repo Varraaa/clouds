@@ -23,6 +23,7 @@ class Transaction extends Model
         'phone',
         'number_of_passengers',
         'promo_code_id',
+        'discount',        // <- tambahkan ini
         'payment_status',
         'subtotal',
         'grandtotal',
@@ -41,7 +42,7 @@ class Transaction extends Model
 
     public function promo()
     {
-        return $this->belongsTo(PromoCode::class);
+        return $this->belongsTo(PromoCode::class, 'promo_code_id');
     }
 
     public function passengers()
