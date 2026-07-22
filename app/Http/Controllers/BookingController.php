@@ -6,7 +6,10 @@ use App\Http\Requests\BookingShowRequest;
 use App\Http\Requests\StorePassengerDetailRequest;
 use App\Interface\FlightRepositoryInterface;
 use App\Interface\TransactionRepositoryInterface;
+use App\Mail\TransactionSuccessMail; // Import Class Mail
+use Barryvdh\DomPDF\Facade\Pdf; // Import PDF Facade
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail; // Import Support Mail
 
 class BookingController extends Controller
 {
@@ -20,7 +23,6 @@ class BookingController extends Controller
         $this->flightRepository = $flightRepository;
         $this->transactionRepository = $transactionRepository;
     }
-
 
     public function booking(Request $request, $flightNumber)
     {
@@ -81,7 +83,7 @@ class BookingController extends Controller
 
         // Set your Merchant Server Key
         \Midtrans\Config::$serverKey = config('midtrans.serverKey');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        // Set to Development/Sandbox Environment (default)
         \Midtrans\Config::$isProduction = config('midtrans.isProduction');
         // Set sanitization on (default)
         \Midtrans\Config::$isSanitized = config('midtrans.isSanitized');
@@ -112,9 +114,18 @@ class BookingController extends Controller
             return redirect()->route('home');
         }
 
+        // ==========================================
+        // FITUR KIRIM EMAIL KE MAILTRAP (TAMBAHAN)
+        // ==========================================
+        if (!empty($transaction->email)) {
+            // Jeda 1 detik agar tidak kena rate limit Mailtrap
+            sleep(1);
+
+            Mail::to($transaction->email)->send(new TransactionSuccessMail($transaction));
+        }
+
         return view('pages.booking.success', compact('transaction'));
     }
-
 
     public function checkBooking()
     {
@@ -130,5 +141,21 @@ class BookingController extends Controller
         }
 
         return view('pages.booking.detail', compact('transaction'));
+    }
+
+    // ==========================================
+    // FITUR DOWNLOAD PDF (TAMBAHAN)
+    // ==========================================
+    public function downloadPDF($id)
+    {
+        $transaction = $this->transactionRepository->getTransactionByCode($id);
+
+        if (!$transaction) {
+            return redirect()->back()->with('error', 'Transaksi tidak ditemukan');
+        }
+
+        $pdf = Pdf::loadView('pdf.boarding-pass', compact('transaction')); //agar file pdf bisa terdonload
+
+        return $pdf->download('BoardingPass-' . $transaction->code . '.pdf'); //agar file pdf bisa terdonload
     }
 }

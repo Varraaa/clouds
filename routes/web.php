@@ -31,4 +31,7 @@ Route::get('check-booking', [BookingController::class, 'checkBooking'])->name('b
 
 Route::post('check-booking', [BookingController::class, 'show'])->name('booking.show');
 
+Route::get('booking/download-pdf/{id}', [BookingController::class, 'downloadPDF'])->name('booking.downloadPDF');
+
+
 

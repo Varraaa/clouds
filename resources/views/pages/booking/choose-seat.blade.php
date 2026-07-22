@@ -12,7 +12,7 @@
     <main class="relative flex flex-col w-full max-w-[1280px] px-[75px] mx-auto mt-[50px] mb-[62px]">
         <div class="flex">
             <div id="Left-Content" class="flex flex-col gap-[30px] w-[470px] shrink-0">
-                <a href="choose-tiers.html"
+                <a href="{{ route('flight.show', $flight->flight_number) }}"
                     class="flex items-center rounded-[50px] py-3 px-5 gap-[10px] w-fit bg-garuda-black">
                     <img src="{{ asset('assets/images/icons/arrow-left-white.svg') }}" class="w-6 h-6" alt="icon">
                     <p class="font-semibold text-white">Back to Choose Tiers</p>

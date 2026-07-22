@@ -300,7 +300,7 @@
                     </div>
                 @endforeach
 
-                <a href="#"
+                <a href="{{ route('booking.downloadPDF', $transaction->code) }}"
                     class="w-full rounded-full py-3 px-5 text-center bg-garuda-blue hover:shadow-[0px_14px_30px_0px_#0068FF66] transition-all duration-300">
                     <span class="font-semibold text-white">Download .PDF Version</span>
                 </a>
